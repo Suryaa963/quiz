@@ -9,34 +9,51 @@ bp_admin_quizzes = Blueprint('adminquiz', __name__)
 @jwt_required()
 
 def addQuestions():
-    print('request');
-    data = request.get_json()
-    title = data.get('title')
-    description = data.get('description')
-    questions = data.get('questions');
-    questionslist = []
+    try:
+        print('request');
+        data = request.get_json()
+        title = data.get('title')
+        description = data.get('description')
+        questions = data.get('questions');
+        checkRole = get_jwt()
+        print('checkrole',checkRole,checkRole['role'])
+        if(checkRole['role'] != 'admin'):
+            return jsonify({
+                "messgae":"User not permitted to create a Product. only Admins are allowed"
+            }),401
+        
+        if(not title or  len(questions)==0):
+            return jsonify({
+                "message":"Missing fields!"
+            }),401
+        questionslist = []
     # add in options;
-    for question in questions:
-        
-        print('question',question,question['question_text'])
-        question_text = question.get('question_text')
-        options = question.get('options')
+        for question in questions:
+            
+            print('question',question,question['question_text'])
+            question_text = question.get('question_text')
+            options = question.get('options')
 
-        optionsList = []
-        for option in options:
-            option_text = option.get('option_text')
-            is_correct_str = option.get('is_correct')
-            is_correct = str(is_correct_str).lower() == 'true'
-            optionIns = Option(text = option_text,is_correct = is_correct);
-            optionsList.append(optionIns)
-        
-        questionIns = Question(text = question_text,options = optionsList)
-        questionslist.append(questionIns)
+            optionsList = []
+            for option in options:
+                option_text = option.get('option_text')
+                is_correct_str = option.get('is_correct')
+                is_correct = str(is_correct_str).lower() == 'true'
+                optionIns = Option(text = option_text,is_correct = is_correct);
+                optionsList.append(optionIns)
+            
+            questionIns = Question(text = question_text,options = optionsList)
+            questionslist.append(questionIns)
 
-    quizIns = Quiz(title = title, description = description, questions = questionslist)
-    db.session.add(quizIns);
-    db.session.commit()
+        quizIns = Quiz(title = title, description = description, questions = questionslist)
+        db.session.add(quizIns);
+        db.session.commit()
 
-    return jsonify({
-        "result": quizIns.toDict()
-    }),201
+        return jsonify({
+            "result": quizIns.toDict()
+        }),201
+    
+    except Exception as e:
+        return jsonify({
+            "error":"Unexpected error occurred!"
+        }), 501
