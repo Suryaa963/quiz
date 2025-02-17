@@ -14,12 +14,14 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhos
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['JWT_SECRET_KEY'] = 'suryaprakash'
 
-app.register_blueprint(usersbp,url_prefix = '/users')
-app.register_blueprint(bp_quizzes,url_prefix = '/user/quiz')
-app.register_blueprint(bp_admin_quizzes,url_prefix = '/admin/quiz')
+
 
 db.init_app(app)
 jwt = JWTManager(app)
+
+app.register_blueprint(usersbp,url_prefix = '/users')
+app.register_blueprint(bp_quizzes,url_prefix = '/user/quiz')
+app.register_blueprint(bp_admin_quizzes,url_prefix = '/admin/quiz')
 
 if __name__ =='__main__':
     with app.app_context():
