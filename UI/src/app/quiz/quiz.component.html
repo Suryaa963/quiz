@@ -1,0 +1,32 @@
+<div class="container" *ngIf="!quizSubmission">
+    <div class="question-index">
+    <h1>Question {{currentQuestionIndex+1}} of {{totalQuestion}}</h1>
+    <h2>Time left: {{currentTime | date: 'mm:ss'}}</h2>
+    </div>
+
+    <hr />
+    <div class="question">
+       <p>{{questions[currentQuestionIndex].question_text}}</p>
+       
+       <ng-container>
+        <ul>
+            <li *ngFor="let option of questions[currentQuestionIndex].options">
+                <input type="radio" [name] = "questions[currentQuestionIndex].question_id"
+                [value]="option.option_id" (change)="selectValue($event,questions[currentQuestionIndex].question_id)">
+                {{option.option_text}}
+            </li>
+        </ul>
+       </ng-container> 
+    </div>
+
+    <div class="actions-btn">
+        <button [disabled]="currentQuestionIndex > 0" (click)="goToPrevious()">Previous</button>
+        <button [disabled]="currentQuestionIndex == (questions.length)-1" (click)="goToNext()">Next</button>
+        <button *ngIf="currentQuestionIndex == (questions.length)-1" (click)="submitTest()">Submit</button>
+    </div>
+</div>
+
+<ng-container *ngIf="quizSubmission && quizSubmission.result" >
+    <h2>Total Score: {{quizSubmission.result.score}}</h2>
+</ng-container>
+

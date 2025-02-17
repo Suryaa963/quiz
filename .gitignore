@@ -1,0 +1,27 @@
+# ================================
+# Node (Angular) specific ignores
+# ================================
+/UI/node_modules/
+/UI/dist/
+/UI/tmp/
+
+# Optionally, ignore IDE or editor specific files in client
+/UI/.vscode/
+/UI/.idea/
+
+# ================================
+# Python (Flask) specific ignores
+# ================================
+/api/__pycache__/
+/api/*.py[cod]
+/api/*.sqlite3
+/api/venv/
+/api/env/
+# If using a .env file for environment variables
+/api/.env
+
+# ================================
+# OS generated files
+# ================================
+.DS_Store
+Thumbs.db

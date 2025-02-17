@@ -1,0 +1,9 @@
+<ng-container>
+    <h2>Quizzes:</h2>
+    <ul>
+      <li  style="cursor: pointer;" (click)="navigateSection(quizsection)" 
+      *ngFor="let quizsection of quizSections">
+        {{quizsection['title']}}
+      </li>
+    </ul>
+</ng-container>
