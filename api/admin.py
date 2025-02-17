@@ -19,7 +19,7 @@ def addQuestions():
         print('checkrole',checkRole,checkRole['role'])
         if(checkRole['role'] != 'admin'):
             return jsonify({
-                "messgae":"User not permitted to create a Product. only Admins are allowed"
+                "message":"User not permitted to create a Quiz. only Admins are allowed"
             }),401
         
         if(not title or  len(questions)==0):
