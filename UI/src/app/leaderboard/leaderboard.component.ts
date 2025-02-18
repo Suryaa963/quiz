@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ApiserviceService } from '../apiservice.service';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-leaderboard',
@@ -7,9 +9,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LeaderboardComponent implements OnInit {
 
-  constructor() { }
-
-  ngOnInit(): void {
+  constructor(private auth: AuthService) { 
+   
   }
+   historyScore = history.state.score
+   score: any;
+  ngOnInit(): void {
+    this.score = localStorage.getItem('score');
+    // if(this.historyScore){
+    //   this.auth.setScore(history.state.score);
+    // }
+    // this.score = this.auth.getScore()
+  }
+  
 
+  
 }

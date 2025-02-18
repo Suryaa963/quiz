@@ -8,6 +8,7 @@ import { tap } from 'rxjs';
 export class AuthService {
 
   private apiUrl = 'http://127.0.0.1:5000';
+  score: any;
   currentUser: any = null;
   constructor(private http: HttpClient) { 
     const storedUser = localStorage.getItem('user');
@@ -16,6 +17,12 @@ export class AuthService {
     }
   }
 
+  setScore(score: any){
+    this.score = score;
+  }
+  getScore(){
+    return this.score;
+  }
   signup(data: any) {
     return this.http.post(`${this.apiUrl}/users/signup`, data, {withCredentials: true});
     

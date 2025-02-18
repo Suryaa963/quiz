@@ -31,6 +31,7 @@ export class QuizComponent implements OnInit {
   uniquebyid = new Map();
   quizSubmission: any;
   testSubmitted  = false;
+  userId: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -41,8 +42,22 @@ export class QuizComponent implements OnInit {
 
   ngOnInit() {
     this.quizId = this.route.snapshot.paramMap.get('id');
+    this.userId = this.auth.currentUser.user.id;
     console.log('this.quizid', this.quizId);
+    // check the status -> if already submitted, navigate to score sectoon.
+    
+    this.quizService.getQuizUserAttemptStatus(this.quizId, this.userId).subscribe((resp: any)=>{
+      if(resp.status && String(resp.score)){
+        localStorage.setItem('score',resp.score)
+        this.router.navigate(['/leaderboard'],{state:{score: resp.score}})
+      }else{
+        this.loadQuestions();
+      }
+    })
 
+   
+  }
+  loadQuestions(){
     this.quizService.getQuestionsForSection(this.quizId).subscribe((resp: any)=>{
       console.log('resppp',resp);
        this.questions = resp.result;
@@ -150,7 +165,10 @@ async submitTest(){
   }
   this.quizService.submitQuiz(payload).subscribe(async resp =>{
     console.log('resp',resp);
-    this.quizSubmission = await resp
+    this.quizSubmission = resp
+    localStorage.setItem('score',this.quizSubmission.result.score)
+    await this.router.navigate(['/leaderboard'],{state:{score: this.quizSubmission.score}})
+  
   })
   this.testSubmitted = true
   return;

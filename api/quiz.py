@@ -70,7 +70,7 @@ def submitQuiz():
         payload = {}
         totalscore = 0;
         answers = []
-
+        print('payl', data)
         # extracting datas
         userdetail_id = data.get('userdetail_id')
         quiz_id = data.get('quiz_id')
@@ -78,6 +78,7 @@ def submitQuiz():
         
        
         for resp in response:
+            print('resp',resp)
             iscorrect = False
             question_id = resp.get('question_id')
             selected_option_id = resp.get('selected_option_id')
@@ -89,19 +90,19 @@ def submitQuiz():
             #            "message": "Question not exist"
             #        }),401
        
-        correct_option = Option.query.filter_by(question_id = question_id,is_correct = True).first()
-        print('questionid',question_id,selected_option_id)
-        print('coreect option',correct_option)
-        if correct_option and (correct_option.id == selected_option_id):
-            totalscore+=1;
-            iscorrect = True
-       
-        answerRecord = AnswerRecord(
-            question_id = question_id,
-            selected_option = selected_option_id,
-            is_correct = iscorrect
-        )
-        answers.append(answerRecord)
+            correct_option = Option.query.filter_by(question_id = question_id,is_correct = True).first()
+            print('questionid',question_id,selected_option_id)
+            print('coreect option',correct_option)
+            if correct_option and (correct_option.id == selected_option_id):
+                totalscore+=1;
+                iscorrect = True
+        
+            answerRecord = AnswerRecord(
+                question_id = question_id,
+                selected_option = selected_option_id,
+                is_correct = iscorrect
+            )
+            answers.append(answerRecord)
            
         quizAttempt = QuizAttempt(
             userdetail_id = userdetail_id,
@@ -123,3 +124,19 @@ def submitQuiz():
             "error":"Unexpected error occurred!"
         }),501
    
+@bp_quizzes.route('/<int:quizid>/<int:userid>/status',methods = ['GET'])
+def userquizstatus(quizid,userid):
+   # payload = request.get_json();
+   # userid = payload.get('userid')
+   # quizid = payload.get('quizid');
+
+    UserQuizStatus = QuizAttempt.query.filter_by(userdetail_id = userid, quiz_id = quizid).first();
+    if(UserQuizStatus):
+        return jsonify({
+            "status": True,
+            "score": UserQuizStatus.score
+        }),200
+    return jsonify({
+            "status": False
+        }),200
+    

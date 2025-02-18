@@ -20,4 +20,7 @@ export class ApiserviceService {
 
     return this.http.post(`${this.url}/user/quiz/`,quiz,{headers})
   }
+  getQuizUserAttemptStatus(quizid: any,userid: any){
+    return this.http.get(`${this.url}/user/quiz/${quizid}/${userid}/status`,{withCredentials: true});
+  }
 }

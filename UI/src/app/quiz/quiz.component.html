@@ -20,7 +20,7 @@
     </div>
 
     <div class="actions-btn">
-        <button [disabled]="currentQuestionIndex > 0" (click)="goToPrevious()">Previous</button>
+        <button [disabled]="!(currentQuestionIndex >=1)" (click)="goToPrevious()">Previous</button>
         <button [disabled]="currentQuestionIndex == (questions.length)-1" (click)="goToNext()">Next</button>
         <button *ngIf="currentQuestionIndex == (questions.length)-1" (click)="submitTest()">Submit</button>
     </div>
